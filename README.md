@@ -40,20 +40,20 @@ python interpreter.py my_script.dsl
 This command will run the Ktovet interpreter and execute the commands specified in the 
 `my_script.ktovet` file.
 
-5. Enjoy the Results: Sit back and let Ktovet automate the web crawling tasks for you. The 
-interpreter will execute the DSL commands using Selenium and provide you with the desired output or results.
+5. Enjoy the Results: Sit back and let Ktovet automate your web crawling tasks. The 
+The interpreter will execute the DSL commands using Selenium and provide the desired output or results.
 
-For more detailed information and usage examples, refer to the documentation available in the repository.
+For more detailed information and usage examples, please look at the documentation in the repository.
 
 ## Contributing
 Contributions to Ktovet are welcome! If you encounter any issues, have suggestions for improvements, or want to add new features, please open an issue or submit a pull request on the GitHub repository.
 
-When contributing, make sure to follow the established coding style, write comprehensive tests, and provide clear documentation for your changes.
+When contributing, follow the established coding style, write comprehensive tests, and provide clear documentation for your changes.
 
 License
-Ktovet is released under the MIT License. Feel free to use, modify, and distribute the code as per the terms of the license.
+Ktovet is released under the MIT License. Please use, modify, and distribute the code according to the license terms.
 
 Contact
-If you have any questions, suggestions, or feedback regarding Ktovet, you can reach out to the project maintainers by email at ktovet@example.com or join our community chat on Slack. We're here to help and support you in your web crawling endeavors.
+If you have questions, suggestions, or feedback regarding Ktovet, contact the project maintainers or join our community chat on Slack. We're here to help and support you in your web-crawling endeavours.
 
 Happy crawling with Ktovet!

@@ -1,0 +1,16 @@
+!max-threads(10)
+!sql(news.db)
+!folder(./news)
+
+
+in new window url(https://meduza.io/)
+find-all(.article .Link-root) -> $links
+shuffle($links)
+close window
+in new window url($links)
+  find(h1) -> $title
+  find(.GeneralMaterial-article) -> $text
+  find-all(.GeneralMaterial-article img) -> $images
+  close window
+  save-sql(news.db, news, title, text)
+  save-folder($images)

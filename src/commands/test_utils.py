@@ -4,7 +4,7 @@ from random import seed
 from utils import shuffle
 
 
-class MyModuleTests(unittest.TestCase):
+class ShuffleTests(unittest.TestCase):
 
     def test_shuffle(self):
         # Set a seed for predictable results

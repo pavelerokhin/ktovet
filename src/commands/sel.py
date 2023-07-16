@@ -4,15 +4,6 @@ import time
 from selenium.webdriver.common.by import By
 
 
-def get_page(context=None):
-    if context is None or "driver" not in context or "url" not in context:
-        raise Exception("Invalid context or missing driver or url")
-
-    driver = context["driver"]
-    url = context["url"]
-    driver.get(url)
-
-
 def find_all(context=None):
     if context is None or "driver" not in context or "selector" not in context:
         raise Exception("Invalid context or missing driver or selector")
@@ -21,6 +12,15 @@ def find_all(context=None):
     selector = context["selector"]
     elements = driver.find_elements(By.CSS_SELECTOR, selector)
     return elements
+
+
+def get_page(context=None):
+    if context is None or "driver" not in context or "url" not in context:
+        raise Exception("Invalid context or missing driver or url")
+
+    driver = context["driver"]
+    url = context["url"]
+    driver.get(url)
 
 
 def download_csv(context=None):

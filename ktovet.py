@@ -1,7 +1,6 @@
 import argparse
 import time
 
-from src.pipeline.stage import stage_0, stage_1, stage_2
 from src.etc.dump import clear_damp
 from src.etc.utils import GREEN, WHITE
 from src.etc.output import output
@@ -11,8 +10,8 @@ if __name__ == "__main__":
     t0 = time.time()
 
     # Default values
-    index_url_default = "https://data.oecd.org/searchresults/?hf=20&b=0&r=f%2Ftype%2Fdatasets%2Fapi+access&r=%2Bf%2Ftype%2Fdatasets%2Fapi+access&l=en&s=score"
-    download_path = "../scrappersandcrowlers/oecd/downloads"
+    index_url_default = ""
+    download_path = ""
     max_pool_size_default = 10
     save_partial_results_default = False
 
@@ -35,13 +34,4 @@ if __name__ == "__main__":
     download_path = args.download_path
 
     print(f"starting OECD crawler:\n\t- index url: {index_url}\n\t- parallel processes max pool size: {max_pool_size}\n\t- save partial results in yml files: {save_partial_results}")
-
-    previews = stage_0(url=index_url, t0=t0)
-    pages = stage_1(data=previews, t0=t0, max_pool=max_pool_size)
-    out, fails = stage_2(data=pages, t0=t0, max_pool=max_pool_size, download_path=download_path)
-
-    output(out, fails, 2)
-
-    clear_damp()
-
     print(f"{GREEN}Done in {round(time.time() - t0, 2)}s {WHITE}")

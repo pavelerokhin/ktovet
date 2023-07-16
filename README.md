@@ -35,12 +35,12 @@ crawling needs. The DSL provides a set of commands that Ktovet can interpret and
 4. Run the Interpreter: Execute your DSL script using the Ktovet interpreter. For example:
 
 ```bash
-python interpreter.py my_script.dsl
+python interpreter.py <my_script>
 ```
 This command will run the Ktovet interpreter and execute the commands specified in the 
-`my_script.ktovet` file.
+`my_script` file.
 
-5. Enjoy the Results: Sit back and let Ktovet automate your web crawling tasks. The 
+5. Enjoy the Results: Sit back and let Ktovet automate your web crawling tasks.  
 The interpreter will execute the DSL commands using Selenium and provide the desired output or results.
 
 For more detailed information and usage examples, please look at the documentation in the repository.

@@ -1,4 +1,4 @@
-!max-threads(10)
+!max-threads=10
 !sql(news.db)
 !folder(./news)
 
@@ -11,6 +11,6 @@ in new window url($links)
   find(h1) -> $title
   find(.GeneralMaterial-article) -> $text
   find-all(.GeneralMaterial-article img) -> $images
-  close window
-  save-sql(news.db, news, title, text)
-  save-folder($images)
+close window
+save-sql(news.db, news, title, text)
+save-folder($images)

@@ -13,7 +13,7 @@ class StageTestCase(unittest.TestCase):
         # Define a mock schema with required attributes
         schema = {
             "id": "Simple Schema",
-            "actions":  Actions([Action("Simple Action", self.simple_action)])
+            "actions":  Actions([Action("Simple Action", simple_action)])
         }
 
         data = [4, 5, 6]
@@ -26,7 +26,7 @@ class StageTestCase(unittest.TestCase):
         # Define a mock schema with required attributes
         schema = {
             "id": "Simple Schema",
-            "actions":  Actions([Action("Simple Action", self.simple_action)])
+            "actions":  Actions([Action("Simple Action", simple_action)])
         }
 
         data = [4, 5, 6]

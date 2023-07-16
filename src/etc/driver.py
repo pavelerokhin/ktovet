@@ -17,7 +17,7 @@ def default_options(chrome_options, download_path):
 
     chrome_options.page_load_strategy = 'eager'
 
-    # chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--headless")
     chrome_options.add_argument("--disable-infobars")
     chrome_options.add_argument("--disable-extensions")
 

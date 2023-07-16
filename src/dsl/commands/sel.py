@@ -4,6 +4,15 @@ import time
 from selenium.webdriver.common.by import By
 
 
+def execute_js(context=None):
+    if context is None or "driver" not in context or "js" not in context:
+        raise Exception("Invalid context or missing driver or js")
+
+    driver = context["driver"]
+    js = context["js"]
+    driver.execute_script(js)
+
+
 def find_all(context=None):
     if context is None or "driver" not in context or "selector" not in context:
         raise Exception("Invalid context or missing driver or selector")

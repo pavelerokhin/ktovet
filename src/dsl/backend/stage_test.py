@@ -10,13 +10,14 @@ def simple_action(data=None, context=None):
 
 class StageTests(unittest.TestCase):
     def test_stage_success(self):
+        data = [4, 5, 6]
+
         # Define a mock schema with required attributes
         schema = {
             "id": "Simple Schema",
-            "actions":  Actions([Action("Simple Action", simple_action)])
+            "actions":  Actions([Action(name="Simple Action", func=simple_action, data=data, context=None )])
         }
 
-        data = [4, 5, 6]
         result = stage.stage(data, schema)
 
         # Assertions

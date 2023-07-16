@@ -1,7 +1,6 @@
-import os
 import unittest
 
-from src.commands.sel import get_page, find_all, download_csv
+from src.dsl.commands.sel import get_page, find_all
 from src.etc.driver import make_eager_driver
 
 

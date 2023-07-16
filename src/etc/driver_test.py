@@ -2,7 +2,6 @@ import unittest
 
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.webdriver import WebDriver
-from selenium import webdriver
 
 from src.etc.driver import default_options, make_eager_driver, make_eager_driver_no_js
 

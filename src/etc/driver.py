@@ -22,7 +22,7 @@ def default_options(chrome_options, download_path):
     chrome_options.add_argument("--disable-extensions")
 
 
-def make_eager_driver(download_path):
+def make_eager_driver(download_path=None):
     chrome_options = Options()
     default_options(chrome_options, download_path)
 

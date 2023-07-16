@@ -10,15 +10,21 @@ ban_list = ["https://stats.oecd.org/ViewHTML.aspx",
 
 
 def default_options(chrome_options, download_path):
-    chrome_options.add_experimental_option("prefs", {
-        "download.default_directory": download_path,
-        "download.prompt_for_download": False,
-        "download.directory_upgrade": True,
-    })
+    if download_path is None:
+        chrome_options.add_experimental_option("prefs", {
+            "download.prompt_for_download": False,
+            "download.directory_upgrade": True,
+        })
+    else:
+        chrome_options.add_experimental_option("prefs", {
+            "download.default_directory": download_path,
+            "download.prompt_for_download": False,
+            "download.directory_upgrade": True,
+        })
 
     chrome_options.page_load_strategy = 'eager'
 
-    chrome_options.add_argument("--headless")
+    # chrome_options.add_argument("--headless")
     chrome_options.add_argument("--disable-infobars")
     chrome_options.add_argument("--disable-extensions")
 

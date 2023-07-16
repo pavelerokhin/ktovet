@@ -1,7 +1,7 @@
 import argparse
 import time
 
-from src.pipeline.stages import stage_0, stage_1, stage_2
+from src.pipeline.stage import stage_0, stage_1, stage_2
 from src.etc.dump import clear_damp
 from src.etc.utils import GREEN, WHITE
 from src.etc.output import output

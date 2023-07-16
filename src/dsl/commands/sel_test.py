@@ -1,13 +1,13 @@
 import unittest
 
-from src.dsl.commands.sel import get_page, find_all
+from src.dsl.commands.sel import execute_js, find_all, get_page
 from src.etc.driver import make_eager_driver
 
 
 class SeleniumTests(unittest.TestCase):
     def setUp(self):
         # Set up the Selenium WebDriver
-        self.driver = make_eager_driver(None)
+        self.driver = make_eager_driver()
 
     def tearDown(self):
         # Quit the Selenium WebDriver
@@ -42,6 +42,35 @@ class SeleniumTests(unittest.TestCase):
         # Assert that the first element is a heading element
         self.assertEqual(elements[0].tag_name, "input")
 
+
+class TestExecuteJS(unittest.TestCase):
+    def test_execute_js(self):
+        context = {
+            "driver": make_eager_driver(),
+            "js": "console.log('Hello, World!');"
+        }
+        self.assertIsNone(execute_js(context))
+
+    def test_execute_js_missing_context(self):
+        with self.assertRaises(Exception) as cm:
+            execute_js()
+        self.assertEqual(str(cm.exception), "Invalid context or missing driver or js")
+
+    def test_execute_js_missing_driver(self):
+        context = {
+            "js": "console.log('Hello, World!');"
+        }
+        with self.assertRaises(Exception) as cm:
+            execute_js(context)
+        self.assertEqual(str(cm.exception), "Invalid context or missing driver or js")
+
+    def test_execute_js_missing_js(self):
+        context = {
+            "driver": make_eager_driver(),
+        }
+        with self.assertRaises(Exception) as cm:
+            execute_js(context)
+        self.assertEqual(str(cm.exception), "Invalid context or missing driver or js")
 
 
 if __name__ == "__main__":

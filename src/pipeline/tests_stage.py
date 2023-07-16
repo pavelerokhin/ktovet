@@ -4,10 +4,11 @@ import stage
 from action import Action, Actions
 
 
-class StageTestCase(unittest.TestCase):
-    def simple_action(self, data=None, context=None):
-        return data, []
+def simple_action(data=None, context=None):
+    return data, []
 
+
+class StageTestCase(unittest.TestCase):
     def test_stage_success(self):
         # Define a mock schema with required attributes
         schema = {

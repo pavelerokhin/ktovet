@@ -1,6 +1,6 @@
 import os
 
-from .utils import GREEN, WHITE
+from src.utils import GREEN, WHITE
 
 
 def output(items, fails, stage=0):

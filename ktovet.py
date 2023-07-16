@@ -1,10 +1,7 @@
 import argparse
 import time
 
-from src.etc.dump import clear_damp
-from src.etc.utils import GREEN, WHITE
-from src.etc.output import output
-
+from src.utils import GREEN, WHITE
 
 if __name__ == "__main__":
     t0 = time.time()

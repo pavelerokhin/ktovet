@@ -1,7 +1,7 @@
 import unittest
 import stage
 
-from action import Action, Actions
+from actions import Action, Actions
 
 
 def simple_action(data=None, context=None):
@@ -15,7 +15,7 @@ class StageTests(unittest.TestCase):
         # Define a mock schema with required attributes
         schema = {
             "id": "Simple Schema",
-            "actions":  Actions([Action(name="Simple Action", func=simple_action, data=data, context=None )])
+            "actions":  Actions([Action(name="Simple Action", command=simple_action, data=data, context=None)])
         }
 
         result = stage.stage(data, schema)

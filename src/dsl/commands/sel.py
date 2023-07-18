@@ -2,6 +2,8 @@ import os
 import time
 
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 def execute_js(context=None):
@@ -13,13 +15,16 @@ def execute_js(context=None):
     driver.execute_script(js)
 
 
-def find_all(context=None):
+def find_all(context=None, timeout=10):
     if context is None or "driver" not in context or "selector" not in context:
         raise Exception("Invalid context or missing driver or selector")
 
     driver = context["driver"]
     selector = context["selector"]
-    elements = driver.find_elements(By.CSS_SELECTOR, selector)
+
+    elements = WebDriverWait(driver, timeout).until(
+        EC.presence_of_all_elements_located((By.CSS_SELECTOR, selector))
+    )
     return elements
 
 

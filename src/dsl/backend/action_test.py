@@ -1,6 +1,6 @@
 import unittest
 
-from action import Action, Actions
+from actions import Action, Actions
 
 
 class ActionTests(unittest.TestCase):

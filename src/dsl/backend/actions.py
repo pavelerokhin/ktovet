@@ -8,16 +8,6 @@ class Action:
         return self.command(self.context)
 
 
-class MemoryAction(Action):
-    def __init__(self, name, command, context, memory):
-        super().__init__(name, command, context)
-        self.memory = memory
-
-    def do(self):
-        self.memory = self.command(self.context)
-        return self.memory
-
-
 class Actions:
     def __init__(self, actions, memory=None):
         self.actions = actions
@@ -35,3 +25,14 @@ class Actions:
                 fails.append(e)
 
         return success, fails
+
+
+
+class MemoryAction(Action):
+    def __init__(self, name, command, context, memory):
+        super().__init__(name, command, context)
+        self.memory = memory
+
+    def do(self):
+        self.memory = self.command(self.context)
+        return self.memory

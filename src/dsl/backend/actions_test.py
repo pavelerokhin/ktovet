@@ -1,49 +1,43 @@
 import unittest
 
 from actions import Action, Actions
+from src.dsl.commands.sel import function, function_with_result
 
 
 class ActionTests(unittest.TestCase):
     def test_action_with_required_args(self):
-        def my_func(context=None):
-            return context
+        @function_with_result
+        def my_func(text):
+            return text + " test"
 
-        action = Action("Test Action", my_func)
-        action.do({"text": "xxx"})
-        self.assertEqual(action.context, {"text": "xxx"})
+        action = Action(name="Test Action", command=my_func, result_to="result")
+        context = action.do({"text": "xxx"})
+
+        self.assertIsNotNone(context)
+        self.assertIsNotNone(context.get("result"))
+        self.assertEqual(context.get("result"), "xxx test")
 
     def test_action_missing_required_args(self):
-        def my_func(context):
-            if context is None:
-                raise ValueError("Invalid context or missing text")
-
-            return context
+        @function
+        def my_func():
+            return "test"
 
         with self.assertRaises(ValueError):
             Action("Test Action", my_func).do(None)
 
     def test_actions_execution(self):
-        def add_one(context):
-            if context is None or "data" not in context:
-                raise Exception("Invalid context or missing data")
+        @function_with_result
+        def add_one(data):
+            return data + 1
 
-            data = context["data"]
-            context["data"] = data + 1
-
-            return context
-
-        def multiply_by_two(context):
-            if context is None or "data" not in context:
-                raise Exception("Invalid context or missing data")
-
-            data = context["data"]
-            context["data"] = data * 2
-
-            return context
+        @function_with_result
+        def multiply_by_two(data):
+            return data * 2
 
         context = {"data": 0}
-        actions = [Action("Add One", add_one), Action("Multiply by Two", multiply_by_two)]
-        context, fails = Actions(actions, context, to_store=["data"]).do()
+        actions = [Action(name="Add One", command=add_one, result_to="data"),
+                   Action(name="Multiply by Two", command=multiply_by_two, result_to="data")]
+        context, fails = Actions(actions, context).do()
         self.assertEqual([], fails)
         self.assertEqual(2, context["data"])
 

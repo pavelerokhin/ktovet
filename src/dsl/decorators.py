@@ -33,7 +33,7 @@ def function(func):
 
 def function_with_result(func):
     def wrapper(**kwargs):
-        if "context" not in kwargs.keys() and "result_to" not in kwargs.keys():
+        if "context" not in kwargs.keys() or "result_to" not in kwargs.keys():
             raise ValueError("Invalid arguments")
 
         context = kwargs.get("context")  # should always have context

@@ -14,6 +14,10 @@ def delete(db_name):
     os.remove(db_name)
 
 
+def get_db(db_name):
+    return sqlite3.connect(db_name)
+
+
 def execute(db_name, query):
     db = sqlite3.connect(db_name)
     cursor = db.cursor()

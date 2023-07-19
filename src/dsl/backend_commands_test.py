@@ -10,20 +10,21 @@ class BackendCommandsTests(unittest.TestCase):
         context = {
             "driver": make_eager_driver(),
             "selector": "body",
+            "timeout": 10,
             "url": "https://www.google.com",
         }
 
         # Define a mock schema with required attributes
-        schema = Actions(actions=[Action(name="Get page", command=get_page),
-                                  Action(name="Find all", command=find_all)],
-                         context=context)
+        actions = Actions(actions=[Action(name="Get page", command=get_page),
+                                   Action(name="Find all", command=find_all, result_to="elements")],
+                          context=context)
 
-        context, fails = schema.do()
+        context, fails = actions.do()
 
         # Assertions
         self.assertEqual(fails, [])
-        self.assertEqual(1, len(elements))
-        self.assertEqual("body", elements[0].tag_name)
+        self.assertAlmostEqual(1, len(context.get("elements")))
+        self.assertEqual("body", context.get("elements")[0].tag_name)
 
     def test_stage_failure(self):
         context = {
@@ -32,14 +33,10 @@ class BackendCommandsTests(unittest.TestCase):
         }
 
         # Define a mock schema with required attributes
-        schema = {
-            "id": "Get not existent site",
-            "actions":  Actions(actions=[Action(name="load site", command=get_page)],
-                                context=context)
-        }
+        actions = Actions(actions=[Action(name="load site", command=get_page)],
+                          context=context)
 
-        s = Stage(schema)
-        result, fails = s.do()
+        result, fails = actions.do()
 
         # Assertions
         self.assertNotEqual(fails,  [])

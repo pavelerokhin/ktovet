@@ -2,7 +2,7 @@ import unittest
 import sqlite3
 import os
 
-from db import create, delete, execute, execute_get_results
+from db import create, delete, execute, execute_get_results, get_db
 
 
 class TestDatabaseFunctions(unittest.TestCase):
@@ -50,10 +50,11 @@ class TestDatabaseFunctions(unittest.TestCase):
     def test_execute_query(self):
         # Test the execute_query function
         create(self.db_name, self.schema)
+        db = get_db(self.db_name)
         query = "INSERT INTO users (username, email) VALUES ('test_user', 'test@example.com');"
-        execute(self.db_name, query)
+        execute(db, query)
+
         # Optionally, you can check if the data was inserted correctly
-        db = sqlite3.connect(self.db_name)
         cursor = db.cursor()
         cursor.execute("SELECT * FROM users WHERE username='test_user';")
         user_data = cursor.fetchone()
@@ -66,13 +67,14 @@ class TestDatabaseFunctions(unittest.TestCase):
         # Test the execute_get_results function
 
         # Step 1: Create a temporary database and insert test data
-        create_db(self.db_name, self.schema)
+        create(self.db_name, self.schema)
+        db = get_db(self.db_name)
         query = "INSERT INTO users (username, email) VALUES ('test_user1', 'test1@example.com'), ('test_user2', 'test2@example.com');"
-        execute_query(self.db_name, query)
+        execute(db, query)
 
         # Step 2: Execute the query and get the results
-        select_query = "SELECT * FROM users WHERE email LIKE '%@example.com';"
-        results = execute_get_results(self.db_name, select_query)
+        select_query = "SELECT username, email FROM users WHERE email LIKE '%@example.com';"
+        results = execute_get_results(db, select_query)
 
         # Step 3: Check if the results are as expected
         expected_results = [('test_user1', 'test1@example.com'), ('test_user2', 'test2@example.com')]
@@ -84,6 +86,7 @@ class TestDatabaseFunctions(unittest.TestCase):
         self.assertEqual(results[0][1], 'test1@example.com')
         self.assertEqual(results[1][0], 'test_user2')
         self.assertEqual(results[1][1], 'test2@example.com')
+
 
 if __name__ == '__main__':
     unittest.main()

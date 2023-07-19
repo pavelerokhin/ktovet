@@ -1,45 +1,65 @@
+import inspect
 import os
 import time
 
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+
+from src.etc.driver import make_eager_driver
 
 
-def execute_js(context=None):
-    if context is None or "driver" not in context or "js" not in context:
-        raise Exception("Invalid context or missing driver or js")
+def context_wrapper(func):
+    def wrapper(**kwargs):
+        if kwargs.keys() != {"context"}:
+            raise Exception("Invalid arguments")
+        context = kwargs.get("context")  # should always have context
+        if context is None:
+            raise Exception("Missing context")
 
-    driver = context["driver"]
-    js = context["js"]
+        context = dict(context)
+        params = {}
+        func_signature = inspect.signature(func)
+        for param_name, param in func_signature.parameters.items():
+            if param_name not in context.keys():
+                raise Exception(f"Missing {param_name} in context, func {func.__name__}")
+            params = {param_name: context[param_name]}
+
+        result = func(**params)
+        context[f"result_{func.__name__}"] = result
+
+        return context
+
+    return wrapper
+
+
+@context_wrapper
+def execute_js(driver, js):
     driver.execute_script(js)
 
 
-def find_all(context=None):
-    if context is None or "driver" not in context or "selector" not in context:
-        raise Exception("Invalid context or missing driver or selector")
+@context_wrapper
+def driver():
+    return make_eager_driver()
 
-    driver = context["driver"]
-    selector = context["selector"]
-    elements = driver.find_elements(By.CSS_SELECTOR, selector)
+
+@context_wrapper
+def find_all(driver, timeout, selector):
+    elements = WebDriverWait(driver, timeout).until(
+        EC.presence_of_all_elements_located((By.CSS_SELECTOR, selector))
+    )
+
     return elements
 
 
-def get_page(context=None):
-    if context is None or "driver" not in context or "url" not in context:
-        raise Exception("Invalid context or missing driver or url")
-
-    driver = context["driver"]
-    url = context["url"]
+@context_wrapper
+def get_page(driver, url):
     driver.get(url)
 
 
-def download_csv(context=None):
-    if context is None or "download_path" not in context:
-        raise Exception("Invalid context or missing download_path")
-
-    download_path = context["download_path"]
-
+@context_wrapper
+def download_csv(download_path, timeout):
     # Wait until the file loads
-    timeout = 5
     time_elapsed = 0
     time_step = 0.5
 

@@ -1,6 +1,6 @@
 import unittest
 
-from src.dsl.commands.sel import execute_js, find_all, get_page
+from src.dsl.commands.sel import *
 from src.etc.driver import make_eager_driver
 
 
@@ -28,19 +28,19 @@ class SeleniumTests(unittest.TestCase):
     def test_find_all(self):
         context = {
             "driver": self.driver,
-            "selector": "input[value='Google Search']",
+            "selector": "h1",
             "url": "https://www.google.com/"
         }
 
         # Navigate to a test page
-        get_page(context)
+        context = get_page(context)
         # Get search button elements
-        elements = find_all(context)
+        elements = find_all(context)["find_all_result"]
 
         # Assert that at least one element is found
         self.assertGreater(len(elements), 0)
         # Assert that the first element is a heading element
-        self.assertEqual(elements[0].tag_name, "input")
+        self.assertEqual(elements[0].tag_name, "h1")
 
 
 class TestExecuteJS(unittest.TestCase):
@@ -49,7 +49,7 @@ class TestExecuteJS(unittest.TestCase):
             "driver": make_eager_driver(),
             "js": "console.log('Hello, World!');"
         }
-        self.assertIsNone(execute_js(context))
+        self.assertIsNotNone(execute_js(context))
 
     def test_execute_js_missing_context(self):
         with self.assertRaises(Exception) as cm:
@@ -71,6 +71,12 @@ class TestExecuteJS(unittest.TestCase):
         with self.assertRaises(Exception) as cm:
             execute_js(context)
         self.assertEqual(str(cm.exception), "Invalid context or missing driver or js")
+
+
+class TestDriver(unittest.TestCase):
+    def test_get_driver(self):
+        context = driver(context={})
+        self.assertIsNotNone(context.get("result_driver"))
 
 
 if __name__ == "__main__":

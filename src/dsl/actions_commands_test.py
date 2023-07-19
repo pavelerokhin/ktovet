@@ -1,7 +1,7 @@
 import unittest
 
-from backend.actions import Action, Actions
-from commands.sel import find_all, get_page
+from src.dsl.actions import Action, Actions
+from src.dsl.commands import find_all, get_page
 from src.etc.driver import make_eager_driver
 
 

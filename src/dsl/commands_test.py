@@ -1,6 +1,6 @@
 import unittest
 
-from src.dsl.commands.sel import *
+from src.dsl.commands import *
 from src.etc.driver import make_eager_driver
 
 
@@ -79,7 +79,7 @@ class TestExecuteJS(unittest.TestCase):
 
 class TestDriver(unittest.TestCase):
     def test_get_driver(self):
-        context = driver(context={})
+        context = eager_driver(context={})
         self.assertIsNotNone(context)
 
 

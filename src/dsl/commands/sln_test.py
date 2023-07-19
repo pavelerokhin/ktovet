@@ -1,10 +1,10 @@
 import unittest
 
-from src.dsl.commands import *
+from src.dsl.commands.sln import *
 from src.etc.driver import make_eager_driver
 
 
-class TestsGetPageFindAllCommands(unittest.TestCase):
+class TestsSeleniumCommands(unittest.TestCase):
     def setUp(self):
         # Set up the Selenium WebDriver
         self.driver = make_eager_driver()
@@ -46,11 +46,9 @@ class TestsGetPageFindAllCommands(unittest.TestCase):
         # Assert that the first element is a heading element
         self.assertEqual(elements[0].tag_name, "h1")
 
-
-class TestExecuteJS(unittest.TestCase):
     def test_execute_js(self):
         context = {
-            "driver": make_eager_driver(),
+            "driver": self.driver,
             "js": "console.log('Hello, World!');"
         }
         self.assertIsNotNone(execute_js(context=context))

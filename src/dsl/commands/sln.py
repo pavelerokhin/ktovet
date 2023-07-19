@@ -1,4 +1,3 @@
-import inspect
 import os
 import time
 
@@ -6,8 +5,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
+from src.dsl.decorators import function, function_with_result
 from src.etc.driver import make_eager_driver
-from decorators import function, function_with_result
 
 
 @function

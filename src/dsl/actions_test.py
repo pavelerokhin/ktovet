@@ -1,7 +1,7 @@
 import unittest
 
 from actions import Action, Actions
-from src.dsl.commands.sel import function, function_with_result
+from src.dsl.commands.sln import function, function_with_result
 
 
 class ActionTests(unittest.TestCase):

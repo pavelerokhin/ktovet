@@ -1,4 +1,3 @@
-import sqlite3
 import unittest
 
 from src.dsl.commands.sln import *

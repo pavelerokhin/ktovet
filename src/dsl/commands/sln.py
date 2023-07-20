@@ -29,6 +29,19 @@ def find_all(driver, timeout, selector):
 
 
 @with_context
+def get_attr(data, attr):
+    out = []
+    for element in data:
+        v = element.get_attribute(attr)
+        if v:
+            out.append(v)
+        else:
+            out.append(None)
+
+    return out
+
+
+@with_context
 def get_page(driver, url):
     driver.get(url)
 

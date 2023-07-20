@@ -13,7 +13,7 @@ def context_to_params(context, func):
     return params
 
 
-def function(func):
+def with_context(func):
     def wrapper(**kwargs):
         if "context" not in kwargs.keys():
             raise ValueError("Invalid arguments")
@@ -22,31 +22,14 @@ def function(func):
         if context is None:
             raise ValueError("Missing context")
 
-        params = context_to_params(context, func)
-
-        func(**params)  # call the function and ignore the return value
-
-        return context
-
-    return wrapper
-
-
-def function_with_result(func):
-    def wrapper(**kwargs):
-        if "context" not in kwargs.keys() or "result_to" not in kwargs.keys():
-            raise ValueError("Invalid arguments")
-
-        context = kwargs.get("context")  # should always have context
-        if context is None:
-            raise ValueError("Missing context")
-        result_to = kwargs.get("result_to")  # should always have context
-        if result_to is None:
-            raise ValueError("Missing result_to")
+        result_to = kwargs.get("result_to")
 
         params = context_to_params(context, func)
 
-        result = func(**params)
-        context[result_to] = result
+        result = func(**params)  # call the function and ignore the return value
+
+        if result_to is not None:
+            context[result_to] = result
 
         return context
 

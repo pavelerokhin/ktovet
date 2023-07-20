@@ -78,5 +78,6 @@ class SeleniumAndDbCommandsTests(unittest.TestCase):
         # Assertions
         self.assertNotEqual(fails,  [])
 
+
 if __name__ == '__main__':
     unittest.main()

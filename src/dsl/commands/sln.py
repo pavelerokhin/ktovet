@@ -5,21 +5,21 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-from src.dsl.decorators import function, function_with_result
+from src.dsl.decorators import with_context
 from src.etc.driver import make_eager_driver
 
 
-@function
+@with_context
 def execute_js(driver, js):
     driver.execute_script(js)
 
 
-@function
+@with_context
 def eager_driver():
     return make_eager_driver()
 
 
-@function_with_result
+@with_context
 def find_all(driver, timeout, selector):
     elements = WebDriverWait(driver, timeout).until(
         EC.presence_of_all_elements_located((By.CSS_SELECTOR, selector))
@@ -28,12 +28,12 @@ def find_all(driver, timeout, selector):
     return elements
 
 
-@function
+@with_context
 def get_page(driver, url):
     driver.get(url)
 
 
-@function_with_result
+@with_context
 def download_csv(download_path, timeout):
     # Wait until the file loads
     time_elapsed = 0

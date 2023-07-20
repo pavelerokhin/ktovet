@@ -1,7 +1,7 @@
 import unittest
 
 # Import the functions you want to test here
-from decorators import function, function_with_result
+from decorators import with_context
 
 
 class TestFunctionDecorator(unittest.TestCase):
@@ -9,7 +9,7 @@ class TestFunctionDecorator(unittest.TestCase):
     # Test cases for function decorator
 
     def test_function_with_valid_context(self):
-        @function
+        @with_context
         def my_function(a, b):
             return a + b
 
@@ -19,7 +19,7 @@ class TestFunctionDecorator(unittest.TestCase):
         self.assertEqual(result, context)
 
     def test_function_missing_context(self):
-        @function
+        @with_context
         def my_function(a, b):
             return a + b
 
@@ -27,7 +27,7 @@ class TestFunctionDecorator(unittest.TestCase):
             my_function()
 
     def test_function_invalid_argument(self):
-        @function
+        @with_context
         def my_function(a, b):
             return a + b
 
@@ -35,7 +35,7 @@ class TestFunctionDecorator(unittest.TestCase):
             my_function(c={"a": 5, "b": 10})
 
     def test_function_missing_parameter(self):
-        @function
+        @with_context
         def my_function(a, b):
             return a + b
 
@@ -45,7 +45,7 @@ class TestFunctionDecorator(unittest.TestCase):
     # Test cases for function_with_result decorator
 
     def test_function_with_result_valid_context(self):
-        @function_with_result
+        @with_context
         def multiply(a, b):
             return a * b
 
@@ -55,20 +55,12 @@ class TestFunctionDecorator(unittest.TestCase):
         self.assertEqual(result, {"a": 5, "b": 10, "result": 50})
 
     def test_function_with_result_missing_context(self):
-        @function_with_result
+        @with_context
         def multiply(a, b):
             return a * b
 
         with self.assertRaises(ValueError):
             multiply(result_to="result")
-
-    def test_function_with_result_missing_result_to(self):
-        @function_with_result
-        def multiply(a, b):
-            return a * b
-
-        with self.assertRaises(ValueError):
-            multiply(context={"a": 5, "b": 10})
 
 
 if __name__ == "__main__":

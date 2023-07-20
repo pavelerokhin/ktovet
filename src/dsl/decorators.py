@@ -10,6 +10,10 @@ def context_to_params(context, func, input_mapping=None):
     func_signature = inspect.signature(func)
     for param_name, _ in func_signature.parameters.items():
         mapping = input_mapping.get(param_name, param_name)
+        if mapping == "context":
+            params["context"] = context
+            continue
+
         if mapping not in context.keys():
             raise ValueError(f"Missing {param_name} in context (or missing input mapping)")
         params[param_name] = context[mapping]

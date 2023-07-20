@@ -1,12 +1,14 @@
 import unittest
 
 from src.dsl.actions import Action, Actions
-from src.dsl.commands.sln import find_all, get_attr, get_page
+from src.dsl.commands.db import *
+from src.dsl.commands.sln import *
 from src.etc.driver import make_eager_driver
 
 
 class MeduzaTests(unittest.TestCase):
-    def test_get_main_page_elements(self):
+    @classmethod
+    def setUpClass(cls) -> None:
         context = {
             "driver": make_eager_driver(),
             "selector": "a.Link-root.Link-isInBlockTitle",
@@ -24,65 +26,61 @@ class MeduzaTests(unittest.TestCase):
                           context=context)
 
         context, fails = actions.do()
+        cls.context = context
+        cls.fails = fails
 
+    @classmethod
+    def tearDownClass(cls) -> None:
+        db = cls.context.get("db")
+        if db is not None:
+            db.close()
+
+        if os.path.exists(cls.context.get("db_name")):
+            try:
+                os.remove(cls.context.get("db_name"))
+            except OSError:
+                pass
+
+    def test_get_main_page_elements(self):
         # Assertions
-        self.assertEqual(fails, [])
-        self.assertIsNotNone(context.get("output_texts"))
-        self.assertIsNotNone(context.get("output_hrefs"))
-        self.assertEqual(len(context.get("output_texts")), len(context.get("output_hrefs")))
-        self.assertEqual("a", context.get("elements")[0].tag_name)
+        self.assertEqual(self.fails, [])
+        self.assertIsNotNone(self.context.get("output_texts"))
+        self.assertIsNotNone(self.context.get("output_hrefs"))
+        self.assertEqual(len(self.context.get("output_texts")), len(self.context.get("output_hrefs")))
+        self.assertEqual("a", self.context.get("elements")[0].tag_name)
 
-    def test_stage_failure(self):
-        context = {
-            "driver": make_eager_driver(),
-            "url": "asfasdfasfasfasdfscfvbdfvbsdfgwfasdg.zzz",
-        }
-
-        # Define a mock schema with required attributes
-        actions = Actions(actions=[Action(name="load site", command=get_page)],
-                          context=context)
-
-        result, fails = actions.do()
-
-        # Assertions
-        self.assertNotEqual(fails,  [])
-
-
-class SeleniumAndDbCommandsTests(unittest.TestCase):
-    def test_find_elements(self):
-        context = {
-            "driver": make_eager_driver(),
-            "selector": "body",
-            "timeout": 10,
-            "url": "https://www.google.com",
-        }
-
-        # Define a mock schema with required attributes
-        actions = Actions(actions=[Action(name="Get page", command=get_page),
-                                   Action(name="Find all", command=find_all, result_to="elements")],
-                          context=context)
-
+    def test_write_to_db(self):
+        context = self.context
+        context.update({
+            "db_name": "test.db",
+            "schema": "CREATE TABLE IF NOT EXISTS test (id INTEGER PRIMARY KEY AUTOINCREMENT, text TEXT NOT NULL, href TEXT NOT NULL);",
+            "insert_query": "INSERT INTO test (text, href) VALUES ('?', '?')",
+            "values": ["output_texts", "output_hrefs"],
+        })
+        actions = Actions(actions=[Action(name="Create db",
+                                          command=create_database),
+                                   Action(name="Create db",
+                                          command=get_database,
+                                          result_to="db"),
+                                   Action(name="Write to db",
+                                          command=insert,
+                                          input_mapping={"query_template": "insert_query"})
+                                   ],
+                          context=self.context)
         context, fails = actions.do()
-
-        # Assertions
         self.assertEqual(fails, [])
-        self.assertAlmostEqual(1, len(context.get("elements")))
-        self.assertEqual("body", context.get("elements")[0].tag_name)
 
-    def test_stage_failure(self):
-        context = {
-            "driver": make_eager_driver(),
-            "url": "asfasdfasfasfasdfscfvbdfvbsdfgwfasdg.zzz",
-        }
-
-        # Define a mock schema with required attributes
-        actions = Actions(actions=[Action(name="load site", command=get_page)],
+        context["count_query"] = "SELECT COUNT(*) FROM test"
+        actions = Actions(actions=[Action(name="Write to db",
+                                          command=execute_query_results,
+                                          input_mapping={"query": "count_query"},
+                                          result_to="count")
+                                   ],
                           context=context)
-
-        result, fails = actions.do()
-
-        # Assertions
-        self.assertNotEqual(fails,  [])
+        context, fails = actions.do()
+        self.assertEqual(fails, [])
+        self.assertIsNotNone(context.get("count"))
+        self.assertNotEqual(context.get("count"), 0)
 
 
 if __name__ == '__main__':

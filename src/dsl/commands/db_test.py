@@ -16,13 +16,13 @@ class TestsDbCommands(unittest.TestCase):
         }
 
         # Call the function
-        context = create_db(context=context)
+        context = create_database(context=context)
 
         # Check if the database was created
         self.assertTrue(os.path.exists(context.get("db_name")))
 
         # delete the database
-        delete_db(context=context)
+        delete_database(context=context)
 
         # Check if the database was created
         self.assertFalse(os.path.exists(context.get("db_name")))
@@ -34,12 +34,12 @@ class TestDBFunctions(unittest.TestCase):
             "db_name": "test.db",
             "schema": schema,
         }
-        create_db(context=context)
+        create_database(context=context)
         self.context = context
-        self.db = get_db(context.get("db_name"))
+        self.db = get_database(context.get("db_name"))
 
     def tearDown(self) -> None:
-        delete_db(context=self.context)
+        delete_database(context=self.context)
         self.db = None
 
     def test_execute_query(self):

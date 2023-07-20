@@ -1,11 +1,14 @@
 class Action:
-    def __init__(self, name, command, result_to=None):
+    def __init__(self, name, command, result_to=None, input_mapping=None):
         self.name = name
         self.command = command
         self.result_to = result_to
+        self.input_mapping = input_mapping
 
     def do(self, context):
-        return self.command(context=context, result_to=self.result_to)
+        return self.command(context=context,
+                            result_to=self.result_to,
+                            input_mapping=self.input_mapping)
 
 
 # Actions is a list of Action, having the common context

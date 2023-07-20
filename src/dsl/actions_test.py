@@ -1,12 +1,12 @@
 import unittest
 
 from actions import Action, Actions
-from src.dsl.commands.sln import sln
+from src.dsl.commands.sln import with_context
 
 
 class ActionTests(unittest.TestCase):
     def test_action_with_required_args(self):
-        @sln
+        @with_context
         def my_func(text):
             return text + " test"
 
@@ -18,7 +18,7 @@ class ActionTests(unittest.TestCase):
         self.assertEqual(context.get("result"), "xxx test")
 
     def test_action_missing_required_args(self):
-        @sln
+        @with_context
         def my_func():
             return "test"
 
@@ -26,11 +26,11 @@ class ActionTests(unittest.TestCase):
             Action("Test Action", my_func).do(None)
 
     def test_actions_execution(self):
-        @sln
+        @with_context
         def add_one(data):
             return data + 1
 
-        @sln
+        @with_context
         def multiply_by_two(data):
             return data * 2
 

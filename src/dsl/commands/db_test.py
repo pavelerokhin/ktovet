@@ -30,33 +30,39 @@ class TestsDbCommands(unittest.TestCase):
 
 
 class TestDBFunctions(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         context = {
             "db_name": "test.db",
             "schema": schema,
         }
         create_db(context=context)
+        self.context = context
         self.db = get_db(context.get("db_name"))
 
+    def tearDown(self) -> None:
+        delete_db(context=self.context)
+        self.db = None
+
     def test_execute_query(self):
-        query1 = "INSERT INTO test_table (name, age) VALUES ('test_user', 20);"
-        execute_query(self.db, query1)
-        query2 = "SELECT name, age FROM test_table;"
+        query1 = "INSERT INTO test (name, age) VALUES ('test_user', 20);"
+        context = self.context
+        context["query"] = query1
+        context["db"] = self.db
+        context = execute_query(context=context)
 
-        execute_query_results(self.db, query2)
+        query2 = "SELECT name, age FROM test;"
+        context["query"] = query2
+        context = execute_query_results(context=context, db=self.db, result_to="result")
+        self.assertIsNotNone(context.get("result"))
 
-    def test_execute_query_results(self, mock_execute_get_results):
+    def test_execute_query_results(self):
         # Test execute_query_results function
-        db_mock = "test_db"
-        query_mock = "SELECT * FROM test_table"
-        context = {
-            "db": db_mock,
-            "query": query_mock,
-        }
-        context = execute_query_results(context=context, result_to="result")
-        self.assertEqual(context.get("result"), mock_execute_get_results.return_value)
+        context = self.context
+        context["query"] = "SELECT * FROM test"
+        context["db"] = self.db
 
-        mock_execute_get_results.assert_called_with(db=db_mock, query=query_mock)
+        context = execute_query_results(context=context, result_to="result")
+        self.assertIsNotNone(context.get("result"))
 
 
 if __name__ == '__main__':

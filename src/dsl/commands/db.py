@@ -1,22 +1,22 @@
-from src.dsl.decorators import sln, function_with_result
+from src.dsl.decorators import with_context
 from src.etc.db import create, delete, execute, execute_get_results
 
 
-@sln
+@with_context
 def create_db(db_name, schema):
     create(db_name=db_name, schema=schema)
 
 
-@sln
+@with_context
 def delete_db(db_name):
     delete(db_name=db_name)
 
 
-@sln
+@with_context
 def execute_query(db, query):
     execute(db=db, query=query)
 
 
-@function_with_result
+@with_context
 def execute_query_results(db, query):
     return execute_get_results(db=db, query=query)

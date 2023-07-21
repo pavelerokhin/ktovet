@@ -1,6 +1,7 @@
 import unittest
 
-from actions import Action, Actions
+from src.dsl.model.Action import Action
+from src.dsl.model.Actions import Actions
 from src.dsl.commands.sln import with_context
 
 

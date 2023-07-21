@@ -1,9 +1,11 @@
 import unittest
 
-from src.dsl.actions import Action, Actions
 from src.dsl.commands.db import *
 from src.dsl.commands.sln import *
 from src.etc.driver import make_eager_driver
+from src.dsl.model.Action import Action
+from src.dsl.model.Actions import Actions
+from src.dsl.model.Iterate import Iterate
 
 
 class MeduzaTests(unittest.TestCase):
@@ -81,6 +83,31 @@ class MeduzaTests(unittest.TestCase):
         self.assertEqual(fails, [])
         self.assertIsNotNone(context.get("count"))
         self.assertNotEqual(context.get("count"), 0)
+
+    def test_iterate(self):
+        context = self.context
+        actions = Actions(actions=[
+            Iterate(context=context, iterator="output_hrefs", actions=Actions([
+                Action(name="follow hrefs",
+                       command=get_page,
+                       input_mapping={"url": "output_hrefs"}),
+                Action(name="find article text",
+                       command=find_all,
+                       input_mapping={"selector": "article_text_selector"},
+                       context={"article_text_selector": ".GeneralMaterial-article"},
+                       result_to="article_texts",
+                       ),
+                Action(name="get text",
+                       command=get_attr,
+                       input_mapping={"data": "article_texts", "attr": "attr_text"},
+                       result_to="article_texts",
+                       )])
+                    )])
+
+        context, fails = actions.do()
+        self.assertEqual(fails, [])
+        texts = context.get("article_texts")
+        print([v[:100] for v in texts], sep="*"*100+"\n")
 
 
 if __name__ == '__main__':

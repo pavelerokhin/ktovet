@@ -1,4 +1,4 @@
-from src.dsl.decorators import with_context
+from src.dsl.model.decorators import with_context
 from src.etc.db import *
 
 

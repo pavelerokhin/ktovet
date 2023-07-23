@@ -95,11 +95,11 @@ class MeduzaTests(unittest.TestCase):
                        command=find_all,
                        input_mapping={"selector": "article_text_selector"},
                        context={"article_text_selector": ".GeneralMaterial-article"},
-                       result_to="article_texts",
+                       result_to="articles",
                        ),
                 Action(name="get text",
                        command=get_attr,
-                       input_mapping={"data": "article_texts", "attr": "attr_text"},
+                       input_mapping={"data": "articles", "attr": "attr_text"},
                        result_to="article_texts",
                        )])
                     )])

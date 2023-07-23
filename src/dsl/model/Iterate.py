@@ -16,12 +16,19 @@ class Iterate:
             raise ValueError("Nothing to iterate")
 
         initial_context = self.context
+        initial_keys = set(initial_context.keys())  # Track initial keys
+
         all_fails = []
+
         for element in elements:
-            ctx = initial_context
-            ctx[self.iterator] = element
+            ctx = {**initial_context, self.iterator: element}
             ctx, fails = self.actions.do(ctx)
-            self.context.update(ctx)
+            ctx = {key: value for key, value in ctx.items() if key not in initial_keys}  # Update only modified keys
             all_fails.extend(fails)
 
-        return self.context, all_fails
+            for key in ctx.keys():
+                if self.context.get(key) is None:
+                    self.context[key] = []
+                self.context[key].append(ctx[key])
+
+        return {**initial_context, **(self.context if self.context is not None else {})}, all_fails

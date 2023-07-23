@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-from src.dsl.decorators import with_context
+from src.dsl.model.decorators import with_context
 from src.etc.driver import make_eager_driver
 
 

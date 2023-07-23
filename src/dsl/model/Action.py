@@ -1,5 +1,5 @@
 class Action:
-    def __init__(self, name, command, context: dict = None, result_to=None, input_mapping=None):
+    def __init__(self, name, command, context: dict = None, input_mapping=None, result_to=None):
         self.name = name
         self.command = command
         self.context = context

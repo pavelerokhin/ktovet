@@ -1,7 +1,7 @@
 import unittest
 
 # Import the functions you want to test here
-from decorators import with_context
+from src.dsl.model.decorators import with_context
 
 
 class TestFunctionDecorator(unittest.TestCase):
